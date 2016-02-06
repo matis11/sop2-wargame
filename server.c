@@ -37,12 +37,12 @@ int main() {
 
     
     //Mutex init
-   semid = semget(SEMCOLLECTIONID, NUMBEROFMUTEX, IPC_CREAT|0600);
-    if (semid == -1){
-        perror("Mutex error");
-        exit(1);
-    }
-    ￼￼￼semctl(semid, 0, SETVAL, 1); //dajemy semaforowi wartosc 1
+   	semid = semget(SEMCOLLECTIONID, NUMBEROFMUTEX, IPC_CREAT|0600);
+    	if (semid == -1){
+        	perror("Mutex error");
+        	exit(1);
+   	 }
+    ￼￼￼	semctl(semid, 0, SETVAL, 1); //dajemy semaforowi wartosc 1
         
     
 	puts("Server initialization");
@@ -58,14 +58,16 @@ int main() {
 				perror("Add memory to player1");
 				exit(1);
 			}
-
+			int i = 0;
 			while(1) {
+				i++;
 				// Listen Player1 actions
 				// ---------------------------
 				//  - Receive messages
 				//  - Run functions
 				//  - Send results
 				//
+				writeToMemory(i,1,buf,semid);
 			}
             shmdt(shm);
         }
@@ -126,7 +128,10 @@ void proberen(int semid, int semnum, int p){
 }
 
 
+int readFromMemory(int position,int* memory,int semid) {
 
+
+}
 
 void writeToMemory(int value, int position, int* memory,int semid) {
     proberen(semid, 0, 1);
