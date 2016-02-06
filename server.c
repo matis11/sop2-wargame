@@ -18,10 +18,16 @@ int main() {
 	
 	if ( fork() == 0 ) {
 		//child
+		if ( fork() == 0 ) {
+			puts("3");
+		} else {
+			puts("2");
+		}
 
+		puts("BOTH 3 AND 2");
 	} else {
 		//parent
-
+		puts("PARENT");
 	}
 
 	return 0;
