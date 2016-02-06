@@ -17,17 +17,36 @@ int main() {
 	puts("Server initialization");
 	
 	if ( fork() == 0 ) {
-		//child
+		// Handle clients
+		
 		if ( fork() == 0 ) {
-			puts("3");
+			while(1) {
+				// Listen Player1 actions
+				// ---------------------------
+				//  - Receive messages
+				//  - Run functions
+				//  - Send results
+				//
+			}
 		} else {
-			puts("2");
+			while(1) {
+				// Listen Player2 actions
+				// ---------------------------
+				//  - Receive messages
+				//  - Run functions
+				//  - Send results
+				//
+			}
 		}
 
-		puts("BOTH 3 AND 2");
 	} else {
-		//parent
-		puts("PARENT");
+		// Server's logic
+		// -------------------
+		//  - Count units for both players
+		//  - Calculate wars
+		//
+
+		puts("I'm server");
 	}
 
 	return 0;
