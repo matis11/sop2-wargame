@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/sem.h>
 
 #define SHM 1024
 #define SHMID 1234
@@ -15,7 +16,7 @@ static struct sembuf sembuff;
 int main() {
 
 	int shmid;
-    int semid;
+        int semid;
 	key_t key;
 	int *shm, *s;
 	int *buf;
@@ -36,7 +37,7 @@ int main() {
 
     
     //Mutex init
-    semid = semget(SEMCOLLECTIONID, NUMBEROFMUTEX, IPC_CREAT|0600);
+   semid = semget(SEMCOLLECTIONID, NUMBEROFMUTEX, IPC_CREAT|0600);
     if (semid == -1){
         perror("Mutex error");
         exit(1);
@@ -69,12 +70,12 @@ int main() {
             shmdt(shm);
         }
         else {
-			shmid = shmget(SHMID,SHM, 0);
-	                buf = shmat(shmid, NULL, 0);
-			if(buf == NULL) {
-                perror("Add memory to player2");
-                exit(1);
-            }
+		shmid = shmget(SHMID,SHM, 0);
+	        buf = shmat(shmid, NULL, 0);
+		if(buf == NULL) {
+                	perror("Add memory to player2");
+                	exit(1);
+            	}
 
 			while(1) {
 				// Listen Player2 actions
@@ -98,12 +99,13 @@ int main() {
 		puts("I'm server");
 	}
 
+	//shmctl(shmid,IPC_RMID, buf);
 	return 0;
 }
 
 
 
-void Vergholen(int semid, int semnum, int v){ //id semafora, numer semafora w tablicy, wartosc o ile podnosimy
+void vergholen(int semid, int semnum, int v){ //id semafora, numer semafora w tablicy, wartosc o ile podnosimy
        sembuff.sem_num = semnum;
        sembuff.sem_op = v;
        sembuff.sem_flg = 0;
@@ -113,7 +115,7 @@ void Vergholen(int semid, int semnum, int v){ //id semafora, numer semafora w ta
        }
 }
 
-void Proberen(int semid, int semnum, int p){
+void proberen(int semid, int semnum, int p){
     sembuff.sem_num = semnum;
     sembuff.sem_op = -p;
     sembuff.sem_flg = 0;
@@ -126,9 +128,9 @@ void Proberen(int semid, int semnum, int p){
 
 
 
-void write(int value, int position, int* memory) {
-    Proberen(semid, 0, 1);
+void writeToMemory(int value, int position, int* memory,int semid) {
+    proberen(semid, 0, 1);
     memory[position] = value;
-    Vergholen(semid, 0, 1);
+    vergholen(semid, 0, 1);
 }
 
