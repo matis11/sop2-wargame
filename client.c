@@ -34,7 +34,8 @@ int main() {
 			while(1) {
 				char order[255];
 				gets(order);
-				printf("PERFORMING %s sir!\n", order);
+				printf("PERFORMING %s sir!\n", order);	
+
 			}
 		}
 	}
