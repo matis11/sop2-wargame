@@ -6,6 +6,7 @@
 #include <sys/shm.h>
 
 #define SHM 1024
+#define SHMID 1234
 
 
 int main() {
@@ -13,6 +14,21 @@ int main() {
 	int shmid;
 	key_t key;
 	int *shm, *s;
+	int *buf;
+
+	//Memory creation && init
+
+	shmid = shmget(SHMID, SHM, IPC_CREAT|0600); 
+	if (shmid == -1){
+		perror("Error1"); 
+		exit(1);
+	}
+
+	buf = (int*)shmat(shmid, NULL, 0); 
+	if (buf == NULL){
+		perror("Add memory to mother");
+       		exit(1);
+	}
 
 	puts("Server initialization");
 	
@@ -20,6 +36,14 @@ int main() {
 		// Handle clients
 		
 		if ( fork() == 0 ) {
+			
+			shmid = shmget(SHMID,SHM, 0);
+			buf = shmat(shmid, NULL, 0);
+			if(buf == NULL) {
+				perror("Add memory to player1");
+				exit(1);
+			}
+
 			while(1) {
 				// Listen Player1 actions
 				// ---------------------------
@@ -28,7 +52,14 @@ int main() {
 				//  - Send results
 				//
 			}
-		} else {
+			shmdt(shm);
+		}
+	       	else {
+			shmid = shmget(SHMID,SHM, 0);
+	                buf = shmat(shmid, NULL, 0);
+			if(buf == NULL) {								                        perror("Add memory to player2");						 		exit(1);
+	 	       	}
+
 			while(1) {
 				// Listen Player2 actions
 				// ---------------------------
@@ -37,6 +68,8 @@ int main() {
 				//  - Send results
 				//
 			}
+
+			shmdt(buf);
 		}
 
 	} else {
@@ -53,9 +86,16 @@ int main() {
 }
 
 
-int initialize() {
-	
-}
+
+void podnies(int semid, int semnum){
+       buf.sem_num = semnum;
+       buf.sem_op = 1;
+                buf.sem_flg = 0;
+	       	if (semop(semid, &buf, 1) == -1){
+		       	perror("Podnoszenie semafora"); 
+			exit(1);	
+	   	}
+
 
 void edit(int x) {
 	// Set semaphore
