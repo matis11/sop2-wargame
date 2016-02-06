@@ -7,11 +7,15 @@
 
 #define SHM 1024
 #define SHMID 1234
+#define NUMBEROFMUTEX 1 // Amout of mutex in array
+#define SEMCOLLECTIONID 45281
 
 
+static struct sembuf sembuff;
 int main() {
 
 	int shmid;
+    int semid;
 	key_t key;
 	int *shm, *s;
 	int *buf;
@@ -30,6 +34,16 @@ int main() {
        		exit(1);
 	}
 
+    
+    //Mutex init
+    semid = semget(SEMCOLLECTIONID, NUMBEROFMUTEX, IPC_CREAT|0600);
+    if (semid == -1){
+        perror("Mutex error");
+        exit(1);
+    }
+    ￼￼￼semctl(semid, 0, SETVAL, 1); //dajemy semaforowi wartosc 1
+        
+    
 	puts("Server initialization");
 	
 	if ( fork() == 0 ) {
@@ -52,13 +66,15 @@ int main() {
 				//  - Send results
 				//
 			}
-			shmdt(shm);
-		}
-	       	else {
+            shmdt(shm);
+        }
+        else {
 			shmid = shmget(SHMID,SHM, 0);
 	                buf = shmat(shmid, NULL, 0);
-			if(buf == NULL) {								                        perror("Add memory to player2");						 		exit(1);
-	 	       	}
+			if(buf == NULL) {
+                perror("Add memory to player2");
+                exit(1);
+            }
 
 			while(1) {
 				// Listen Player2 actions
@@ -87,18 +103,32 @@ int main() {
 
 
 
-void podnies(int semid, int semnum){
-       buf.sem_num = semnum;
-       buf.sem_op = 1;
-                buf.sem_flg = 0;
-	       	if (semop(semid, &buf, 1) == -1){
-		       	perror("Podnoszenie semafora"); 
-			exit(1);	
-	   	}
-
-
-void edit(int x) {
-	// Set semaphore
-	// Save to SHAREDMEMORY
-	// Remove semaphore
+void Vergholen(int semid, int semnum, int v){ //id semafora, numer semafora w tablicy, wartosc o ile podnosimy
+       sembuff.sem_num = semnum;
+       sembuff.sem_op = v;
+       sembuff.sem_flg = 0;
+       if (semop(semid, &sembuff, 1) == -1){
+            perror("V operation");
+            exit(1);
+       }
 }
+
+void Proberen(int semid, int semnum, int p){
+    sembuff.sem_num = semnum;
+    sembuff.sem_op = -p;
+    sembuff.sem_flg = 0;
+    if (semop(semid, &sembuff, 1) == -1){
+        perror("P operation");
+        exit(1);
+    }
+}
+
+
+
+
+void write(int value, int position, int* memory) {
+    Proberen(semid, 0, 1);
+    memory[position] = value;
+    Vergholen(semid, 0, 1);
+}
+
