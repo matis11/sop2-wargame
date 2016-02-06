@@ -8,7 +8,7 @@
 
 #define SHM 1024
 #define SHMID 1234
-#define NUMBEROFMUTEX 1 // Amout of mutex in array
+#define NUMBEROFMUTEX 2 // Amout of mutex in array
 #define SEMCOLLECTIONID 45281
 
 
@@ -42,9 +42,15 @@ int main() {
         	perror("Mutex error");
         	exit(1);
    	 }
-    ￼￼￼	semctl(semid, 0, SETVAL, 1); //dajemy semaforowi wartosc 1
-        
-    
+    ￼￼￼	semctl(semid, 0, SETVAL, 1); //semafor numer 0 ma wartosc 1
+        semctl(semid, 1, SETVAL, 10); //semafor numer 1 ma wartosc 10
+
+
+	//Wydaej mi sie ze tutaj mozna stworzyc kolejki komunikatow a obsluga potem w odpowiednich forkach
+
+
+
+     //--------------------------------------------------
 	puts("Server initialization");
 	
 	if ( fork() == 0 ) {
@@ -86,6 +92,7 @@ int main() {
 				//  - Run functions
 				//  - Send results
 				//
+				pri
 			}
 
 			shmdt(buf);
@@ -129,13 +136,20 @@ void proberen(int semid, int semnum, int p){
 
 
 int readFromMemory(int position,int* memory,int semid) {
-
-
+    proberen(semid, 1, 10);
+    proberen(semid, 0 ,1);
+    verhogen(semid, 1, 9);
+    verhogen(semid, 1, 1);
+    int readed = memory[position];    
+    verhogen(semid, 0, 1);
+    return readed;
 }
 
 void writeToMemory(int value, int position, int* memory,int semid) {
-    proberen(semid, 0, 1);
+    proberen(semid, 1, 1);
+    proberen(semid, 0, 10);
     memory[position] = value;
-    verhogen(semid, 0, 1);
+    verhogen(semid, 0, 10);
+    verhogen(semid, 1, 1);
 }
 
