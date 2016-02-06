@@ -105,7 +105,7 @@ int main() {
 
 
 
-void vergholen(int semid, int semnum, int v){ //id semafora, numer semafora w tablicy, wartosc o ile podnosimy
+void verhogen(int semid, int semnum, int v){ //id semafora, numer semafora w tablicy, wartosc o ile podnosimy
        sembuff.sem_num = semnum;
        sembuff.sem_op = v;
        sembuff.sem_flg = 0;
@@ -131,6 +131,6 @@ void proberen(int semid, int semnum, int p){
 void writeToMemory(int value, int position, int* memory,int semid) {
     proberen(semid, 0, 1);
     memory[position] = value;
-    vergholen(semid, 0, 1);
+    verhogen(semid, 0, 1);
 }
 
