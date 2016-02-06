@@ -56,3 +56,9 @@ int main() {
 int initialize() {
 	
 }
+
+void edit(int x) {
+	// Set semaphore
+	// Save to SHAREDMEMORY
+	// Remove semaphore
+}
