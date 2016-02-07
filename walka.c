@@ -16,38 +16,26 @@ void attack_p1(int lic, int hic, int cc){//atak ze strony p1
 			hic_p2=0;
 			cc_p2=0;
 		}else{
-			tsl=lic_p2*p2d/p1a;
-			tsh=hic_p2*p2d/p1a;
-			tdc=cc_p2*p2d/p1a;
+			tsl=lic_p2/p2d*p1a;
+			tsh=hic_p2/p2d*p1a;
+			tdc=cc_p2/p2d*p1a;
 			lic_p2-=tsl;
 			hic_p2-=tsh;
 			cc_p2-=tsc;
 		}
-		tsl=lic*p1a/p2d;
-		tsh=hic*p1a/p2d;
-		tsc=cc*p1a/p2d;
-		lic-=tsl;
-		hic-=tsh;
-		cc-=tsc;
 		//siła obrony p1 vs siła ataku p2
 		if(p2a>p1d){
 			lic=0;
 			hic=0;
 			cc=0;
 		}else{
-			tsl=lic*p1d/p2a;
-			tsh=hic*p1d/p2a;
-			tsc=cc*p1d/p2a;
+			tsl=lic/p1d*p2a;
+			tsh=hic/p1d*p2a;
+			tsc=cc/p1d*p2a;
 			lic-=tsl;
 			hic-=tsh;
 			cc-=tsc;
 		}
-		tsl=lic_p2*p2a/p1d;
-		tsh=hic_p2*p2a/p1d;
-		tsc=cc_p2*p2a/p1d;
-		lic_p2-=tsl
-		hic_p2-=tsh;
-		cc_p2-=tsc;
 	pushback(lic,hic,cc,lic_p2,hic_p2,cc_p2);
 }
 
