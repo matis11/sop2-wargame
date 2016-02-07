@@ -74,13 +74,14 @@ int main() {
 	}
 
 	if (fork() == 0) {
-		int i = 1;
 		while(1) {
 			// Get status from server using msg
-			
-			display_status(i,i,i,i,i);
-			sleep(1);
-			i++;
+			msgrcv(msg_id, msg_status, msg_status_size, 4, 0);
+			display_status(msg_status.recources[0],
+					msg_status.resources[1],
+					msg_status.resources[2],
+					msg_status.resources[3],
+					msg_status.resources[4]);
 		}
 	} else {
 		printf("\n\nWhat are your orders, sir?\n");
@@ -138,11 +139,11 @@ int main() {
 int display_status(gold, light, heavy, cavalry, workers) {
 	printf("\0337\033[H\033[K");
 	printf("\033[030;47m #%d: %s \033[0m", player_id, player_name);
-	printf("\033[030;43m GOLD: %d$ \033[0m", gold);
-	printf("\033[030;41m LIGHT: %d \033[0m", light);
-	printf("\033[030;42m HEAVY: %d \033[0m", heavy);
-	printf("\033[030;45m CAVALRY: %d \033[0m", cavalry);
-	printf("\033[030;46m WORKERS: %d\033[0m", workers);
+	printf("\033[030;43m GOLD: %llu$ \033[0m", gold);
+	printf("\033[030;41m LIGHT: %llu \033[0m", light);
+	printf("\033[030;42m HEAVY: %llu \033[0m", heavy);
+	printf("\033[030;45m CAVALRY: %llu \033[0m", cavalry);
+	printf("\033[030;46m WORKERS: %llu\033[0m", workers);
 	printf("\0338");
 }
 
