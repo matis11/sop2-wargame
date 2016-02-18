@@ -41,7 +41,7 @@ int main() {
 	struct msg_status {
 		long mtype; //must be: 4
 		unsigned long long int resources[5];
-	} msg_info;
+	} msg_status;
 
 	int msg_info_size = sizeof(struct msg_info) - sizeof(long);
 	int msg_attack_size= sizeof(struct msg_attack) - sizeof(long);
@@ -53,6 +53,7 @@ int main() {
 	printf("What's your name commander?\n");
 	gets(player_name);
 	system("clear");
+	printf("Waiting for server...");
 
 	// Determine player nr
 	while(1) {
@@ -73,11 +74,13 @@ int main() {
 		}
 	}
 
+	system("clear");
+
 	if (fork() == 0) {
 		while(1) {
 			// Get status from server using msg
-			msgrcv(msg_id, msg_status, msg_status_size, 4, 0);
-			display_status(msg_status.recources[0],
+			msgrcv(msg_id, &msg_status, msg_status_size, 4, 0);
+			display_status(msg_status.resources[0],
 					msg_status.resources[1],
 					msg_status.resources[2],
 					msg_status.resources[3],
