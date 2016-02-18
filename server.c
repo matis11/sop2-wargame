@@ -109,7 +109,7 @@ void updateResoures(int* memory, int semid) {
 }
 
 //player - which player attack (0 or 1)
-void attack(int player, int numOfLightAttack, int numOfHeavyAttack, int numOfCavarlyAttack, int memory, int sid) {
+void attack(int player, int numOfLightAttack, int numOfHeavyAttack, int numOfCavarlyAttack, int *memory, int sid) {
     const float valueAttackLight = 1;
     const float valueAttackHeavy = 1.5;
     const float valueAttackCavarly = 3.5;
