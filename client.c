@@ -51,7 +51,7 @@ int main() {
 	system("clear");
 	setbuf(stdout, NULL);
 	printf("What's your name commander?\n");
-	gets(player_name);
+	scanf("%s", player_name);
 	system("clear");
 	printf("Waiting for server...");
 
@@ -90,7 +90,7 @@ int main() {
 		printf("\n\nWhat are your orders, sir?\n");
 		while(1) {
 			char order[255];
-			scanf(" %s", &order);
+			scanf(" %s", order);
 			printf("PERFORMING %s sir!\n", order);
 			
 			if (strstr(order, "build") != NULL) {
@@ -98,7 +98,7 @@ int main() {
 
 				char temp_type[255];
 				
-				scanf("%s", &temp_type);
+				scanf("%s", temp_type);
 				scanf("%d", &msg_build.quantity);
 
 				if (strstr(temp_type, "light") != NULL) {
