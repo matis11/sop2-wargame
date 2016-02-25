@@ -24,7 +24,7 @@ int main() {
 	struct msg_info {
 	    long mtype; //must be: 1
 	    char info[255];
-    } msg_info;
+    	} msg_info;
 
 	struct msg_attack {
 		long mtype; //must be: 2
